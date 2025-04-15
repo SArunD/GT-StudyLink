@@ -15,16 +15,16 @@ let info;
 
 export default function CalendarApp() {
     const [currentEvents, setCurrentEvents] = useState([])
-    const [seen, setSeen] = useState(false)
+    const [seeCreate, setSeeCreate] = useState(false)
 
-    function togglePop () {
-        setSeen(!seen);
+    function toggleCreate () {
+        setSeeCreate(!seeCreate);
     };
   
     function handleDateSelect(selectInfo) {
         calendarApi = selectInfo.view.calendar
         info = selectInfo;
-        togglePop();
+        toggleCreate();
     }
 
   
@@ -68,8 +68,8 @@ export default function CalendarApp() {
           />
         </div>
         <div>
-            <button onClick={togglePop}>Create a new study session</button>
-            {seen ? <CreateSession toggle={togglePop} /> : null}
+            <button onClick={toggleCreate}>Create a new study session</button>
+            {seeCreate ? <CreateSession toggle={toggleCreate} /> : null}
         </div>
       </div>
     )
@@ -88,13 +88,14 @@ function CreateSession(props) {
     //****************** TO DO: CONNECT TIME PICKER TO CREATING STUDY SESSION, clean up login, add tag functionality **********************************
     const [sName, setSName] = useState('')
     const [sTag, setSTag] = useState('')
+    const [sDesc, setSDesc] = useState('')
     const [pStart, setPStart] = useState('')
     const [pEnd, setPEnd] = useState('')
 
     function handleLogin(e) {
         e.preventDefault()
         // **************** TO DO: REPLACE TEMP VAL  ***************************
-        addSession(sName, pStart, pEnd)
+        addSession(sName, sDesc, pStart, pEnd)
         // Code to handle login goes here
         props.toggle()
     }
@@ -112,6 +113,10 @@ function CreateSession(props) {
                         Tags:
                         <input type="text" value={sTag} onChange={e => setSTag(e.target.value)} />
                     </label>
+                    <label>
+                        Description:
+                        <input type="text" value={sDesc} onChange={e => setSDesc(e.target.value)} />
+                    </label>
                     <div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <TimePicker label="Start time" onChange={e => setPStart(e)}/>
@@ -128,7 +133,7 @@ function CreateSession(props) {
     )
 }
 
-function addSession(title, start, end) {
+function addSession(title, description, start, end) {
     let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
     let newEnd = info.endStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
     if (title) {
@@ -137,7 +142,8 @@ function addSession(title, start, end) {
             title,
             start: newStart.replace(/T.*$/, ''),
             end: newEnd.replace(/T.*$/, ''),
-            allDay: false
+            allDay: false,
+            description
         })
         }
     calendarApi.unselect() // clear date selection
