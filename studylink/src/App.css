@@ -141,3 +141,9 @@ select {
   color: #ffffff;
   cursor: not-allowed;
   }
+  .fc-popover-body {
+    background-color:dimgray;
+  }
+  .fc-popover-header {
+    color:#282c34
+  }

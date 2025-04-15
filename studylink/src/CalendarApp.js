@@ -4,15 +4,16 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+import { INITIAL_EVENTS, createEventId} from './event-utils'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 let calendarApi;
+let info;
 
 
-export default function DemoApp() {
+export default function CalendarApp() {
     const [currentEvents, setCurrentEvents] = useState([])
     const [seen, setSeen] = useState(false)
 
@@ -21,14 +22,14 @@ export default function DemoApp() {
     };
   
     function handleDateSelect(selectInfo) {
-        togglePop();
-        //************ CHANGE TO: NEW EVENT FORM *************************************
-    //   let title = prompt('Please enter a new title for your event')
         calendarApi = selectInfo.view.calendar
+        info = selectInfo;
+        togglePop();
     }
 
   
     function handleEventClick(clickInfo) {
+        clickInfo.event.remove()
         //********** CHANGE TO: SHOW EVENT INFO ***********************
     //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //     clickInfo.event.remove()
@@ -84,11 +85,16 @@ function renderEventContent(eventInfo) {
 }
 
 function CreateSession(props) {
+    //****************** TO DO: CONNECT TIME PICKER TO CREATING STUDY SESSION, clean up login, add tag functionality **********************************
     const [sName, setSName] = useState('')
     const [sTag, setSTag] = useState('')
+    const [pStart, setPStart] = useState('')
+    const [pEnd, setPEnd] = useState('')
 
     function handleLogin(e) {
         e.preventDefault()
+        // **************** TO DO: REPLACE TEMP VAL  ***************************
+        addSession(sName, pStart, pEnd)
         // Code to handle login goes here
         props.toggle()
     }
@@ -108,14 +114,13 @@ function CreateSession(props) {
                     </label>
                     <div>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker label="Start time" />
+                            <TimePicker label="Start time" onChange={e => setPStart(e)}/>
                         </LocalizationProvider>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker label="End time" />
+                            <TimePicker label="End time" onChange={e => setPEnd(e)}/>
                         </LocalizationProvider>
                     </div>
-                    
-                    <button type="submit" onClick={addSession(sName, 'tempval', 'tempval')}>Add Session</button>
+                    <button type="submit">Add Session</button>
                 </form>
                 <button onClick={props.toggle}>Close</button>
             </div>
@@ -124,16 +129,16 @@ function CreateSession(props) {
 }
 
 function addSession(title, start, end) {
+    let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
+    let newEnd = info.endStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
     if (title) {
-        if (title) {
-            calendarApi.addEvent({
-              id: createEventId(),
-              title,
-              start,
-              end,
-              allDay: false
-            })
-          }
-    }
+        calendarApi.addEvent({
+            id: createEventId(),
+            title,
+            start: newStart.replace(/T.*$/, ''),
+            end: newEnd.replace(/T.*$/, ''),
+            allDay: false
+        })
+        }
     calendarApi.unselect() // clear date selection
 }
