@@ -175,7 +175,8 @@ function CreateSession(props) {
 
 function addSession(title, tags, description, start, end) {
     let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
-    let newEnd = info.endStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
+    let newEnd = info.startStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
+
     if (title) {
         calendarApi.addEvent({
             id: createEventId(),
