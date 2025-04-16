@@ -46,7 +46,7 @@ export default function CalendarApp() {
         // sTags.textContent = clickInfo.event.title;
         // ****** NEED TO ADD TAGS, FORMAT TIME **********
         sTimes.textContent = clickInfo.event.start + " - " + clickInfo.event.end;
-        sDesc.textContent = clickInfo.event.description;
+        sDesc.textContent = clickInfo.event.extendedProps.description;
         console.log(clickInfo.event);
 
         // show popup
