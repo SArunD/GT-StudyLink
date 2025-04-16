@@ -8,6 +8,7 @@ import { INITIAL_EVENTS, createEventId} from './event-utils'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import TagsInput from "./TagsInput"
 
 let calendarApi;
 let info;
@@ -16,6 +17,11 @@ let sTags;
 let sDesc;
 let sTimes;
 let seeSession;
+
+/***** TO DO:
+ * ADD TAG FUNCTIONALITY, FORMAT TIME ON EVENT INFO POPUP, 
+ * ADD EVENT LIST VIEW, ADD FILTERING
+ */
 
 
 export default function CalendarApp() {
@@ -43,7 +49,7 @@ export default function CalendarApp() {
 
         //change info
         sName.textContent = clickInfo.event.title;
-        // sTags.textContent = clickInfo.event.title;
+        // sTags.textContent = clickInfo.event.extendedProps.tags;
         // ****** NEED TO ADD TAGS, FORMAT TIME **********
         sTimes.textContent = clickInfo.event.start + " - " + clickInfo.event.end;
         sDesc.textContent = clickInfo.event.extendedProps.description;
@@ -51,7 +57,7 @@ export default function CalendarApp() {
 
         // show popup
         seeSession.style.visibility="visible";
-        //********** CHANGE TO: SHOW EVENT INFO ***********************
+        //****** FUNCTION TO REMOVE EVENT (FOR LATER USE) ************
     //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //     clickInfo.event.remove()
     //   }
@@ -122,15 +128,14 @@ function renderEventContent(eventInfo) {
 function CreateSession(props) {
     //****************** TO DO: CONNECT TIME PICKER TO CREATING STUDY SESSION, clean up login, add tag functionality **********************************
     const [sName, setSName] = useState('')
-    const [sTag, setSTag] = useState('')
+    const [sTags, setSTag] = useState('')
     const [sDesc, setSDesc] = useState('')
     const [pStart, setPStart] = useState('')
     const [pEnd, setPEnd] = useState('')
 
     function handleLogin(e) {
         e.preventDefault()
-        // **************** TO DO: REPLACE TEMP VAL  ***************************
-        addSession(sName, sDesc, pStart, pEnd)
+        addSession(sName, sTags, sDesc, pStart, pEnd)
         // Code to handle login goes here
         props.toggle()
     }
@@ -139,14 +144,14 @@ function CreateSession(props) {
         <div className="popup">
             <div className="popup-inner">
                 <h2>Create a Study Session</h2>
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLogin} onKeyDown={e => {if (e.key === 'Enter') {e.preventDefault()}}} onKeyUp={e => {if (e.key === 'Enter') {e.preventDefault()}}}>
                     <label>
                         Name of Study Session:
                         <input type="text" value={sName} onChange={e => setSName(e.target.value)} />
                     </label>
                     <label>
                         Tags:
-                        <input type="text" value={sTag} onChange={e => setSTag(e.target.value)} />
+                        <TagsInput />
                     </label>
                     <label>
                         Description:
@@ -168,7 +173,7 @@ function CreateSession(props) {
     )
 }
 
-function addSession(title, description, start, end) {
+function addSession(title, tags, description, start, end) {
     let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
     let newEnd = info.endStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
     if (title) {
@@ -178,39 +183,9 @@ function addSession(title, description, start, end) {
             start: newStart.replace(/T.*$/, ''),
             end: newEnd.replace(/T.*$/, ''),
             allDay: false,
-            description
+            description,
+            tags
         })
         }
     calendarApi.unselect() // clear date selection
 }
-
-function hideSession() {
-    console.log("hide")
-    console.log(seeSession)
-    if (seeSession) {
-        seeSession.style.visibility="hidden";
-    }
-}
-
-
-
-
-// function SeeSession(props) {
-//     return (
-//         <div className="popup">
-//             <div className="popup-inner">
-//                 <h2 id="sName">Name</h2>
-//                 <label id="sTags">
-//                     Tags:
-//                 </label>
-//                 <label id="sTimes">
-//                     Time:
-//                 </label>
-//                 <p id="sDesc">
-//                     Description:
-//                 </p>
-//                 <button onClick={hideSession()}>Close</button>
-//             </div>
-//         </div>
-//     )
-// }
