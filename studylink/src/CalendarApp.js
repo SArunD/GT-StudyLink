@@ -11,6 +11,11 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 let calendarApi;
 let info;
+let sName;
+let sTags;
+let sDesc;
+let sTimes;
+let seeSession;
 
 
 export default function CalendarApp() {
@@ -29,7 +34,23 @@ export default function CalendarApp() {
 
   
     function handleEventClick(clickInfo) {
-        clickInfo.event.remove()
+        sName = document.getElementById("sName");
+        sTags = document.getElementById("sTags");
+        sTimes = document.getElementById("sTimes");
+        sDesc = document.getElementById("sDesc");
+        seeSession = document.getElementById("seeSession");
+        document.getElementById("sessionClose").onclick = function(){seeSession.style.visibility="hidden"};
+
+        //change info
+        sName.textContent = clickInfo.event.title;
+        // sTags.textContent = clickInfo.event.title;
+        // ****** NEED TO ADD TAGS, FORMAT TIME **********
+        sTimes.textContent = clickInfo.event.start + " - " + clickInfo.event.end;
+        sDesc.textContent = clickInfo.event.description;
+        console.log(clickInfo.event);
+
+        // show popup
+        seeSession.style.visibility="visible";
         //********** CHANGE TO: SHOW EVENT INFO ***********************
     //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     //     clickInfo.event.remove()
@@ -68,8 +89,22 @@ export default function CalendarApp() {
           />
         </div>
         <div>
-            <button onClick={toggleCreate}>Create a new study session</button>
             {seeCreate ? <CreateSession toggle={toggleCreate} /> : null}
+            <div className="popup" id="seeSession">
+                <div className="popup-inner">
+                    <h2 id="sName">Name</h2>
+                    <label id="sTags">
+                        Tags:
+                    </label>
+                    <label id="sTimes">
+                        Time:
+                    </label>
+                    <p id="sDesc">
+                        Description:
+                    </p>
+                    <button id="sessionClose">Close</button>
+                </div>
+            </div>
         </div>
       </div>
     )
@@ -148,3 +183,34 @@ function addSession(title, description, start, end) {
         }
     calendarApi.unselect() // clear date selection
 }
+
+function hideSession() {
+    console.log("hide")
+    console.log(seeSession)
+    if (seeSession) {
+        seeSession.style.visibility="hidden";
+    }
+}
+
+
+
+
+// function SeeSession(props) {
+//     return (
+//         <div className="popup">
+//             <div className="popup-inner">
+//                 <h2 id="sName">Name</h2>
+//                 <label id="sTags">
+//                     Tags:
+//                 </label>
+//                 <label id="sTimes">
+//                     Time:
+//                 </label>
+//                 <p id="sDesc">
+//                     Description:
+//                 </p>
+//                 <button onClick={hideSession()}>Close</button>
+//             </div>
+//         </div>
+//     )
+// }

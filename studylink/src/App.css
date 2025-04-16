@@ -147,3 +147,7 @@ select {
   .fc-popover-header {
     color:#282c34
   }
+
+  #seeSession {
+    visibility:hidden;
+  }
