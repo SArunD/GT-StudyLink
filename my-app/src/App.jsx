@@ -1,8 +1,20 @@
+import { Route, Routes } from "react-router"
+
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import ProtectedRoutes from "./utils/ProtectedRoutes"
+import React from "react"
+import Register from "./pages/Register"
+
 function App() {
   return (
-    <div>
-      <h2>Title</h2>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={<ProtectedRoutes />}>
+        <Route path="/" element={<Home />} />
+      </Route>
+    </Routes>
   )
 }
 
