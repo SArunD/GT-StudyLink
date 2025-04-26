@@ -23,7 +23,7 @@ function Register() {
       const user = userCredentials.user
       addUser(e)
       setUser(user)
-      console.log("Signed Up With: ", user.email)
+      console.log("Registered With: ", user.email)
       navigate("/")
     })
     .catch((err) => {

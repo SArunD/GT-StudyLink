@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
             console.log("Getting Existing User")
         } else {
             localStorage.removeItem("user")
-            console.log("Removing User")
+            console.log("Removing Local User")
         }
     }, [user])
 
