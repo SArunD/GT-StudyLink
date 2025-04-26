@@ -1,0 +1,34 @@
+import React, { useContext, useEffect, useState } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+
+import { AuthContext } from "../utils/AuthContext"
+import { db } from "../lib/firebaseConfig"
+import { terminal } from 'virtual:terminal'
+import { useNavigate } from 'react-router'
+
+function Home() {
+  const [items, setItems] = useState([])
+  const { user, setUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    const proceed = confirm("You are about to Logout, do you want to proceed?")
+    if (proceed) {
+      setUser(null)
+      localStorage.removeItem("user")
+      console.log("Logged Out User")
+    }
+  }
+
+  return (
+    <div style={{ border: "2px solid black" }}>
+      <h2>Home</h2>
+
+      <p>Hello, {user.email}!</p>
+      <button onClick={() => navigate("/events")}>Events?</button>
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  )
+}
+
+export default Home
