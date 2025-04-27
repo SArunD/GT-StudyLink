@@ -11,6 +11,7 @@ import ProtectedRoutes from "./utils/ProtectedRoutes"
 import React from "react"
 import Register from "./pages/Register"
 import ViewEvents from "./pages/ViewEvents"
+import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
