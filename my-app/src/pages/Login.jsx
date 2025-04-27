@@ -15,7 +15,7 @@ function Login() {
       const user = userCredentials.user
       setUser(user)
       console.log("Logged In With: ", e.get("email"))
-      navigate("/")
+      navigate("/home")
     })
     .catch((err) => {
       alert(err)

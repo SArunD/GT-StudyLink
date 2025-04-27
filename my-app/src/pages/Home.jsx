@@ -21,12 +21,12 @@ function Home() {
   }
 
   return (
-    <div style={{ border: "2px solid black" }}>
-      <h2>Home</h2>
+    <div className="container mt-5" style={{ maxWidth: "400px" }}>
+      {/* <h2>Home</h2> */}
 
-      <p>Hello, {user.email}!</p>
-      <button onClick={() => navigate("/events")}>Events?</button>
-      <button onClick={handleLogout}>Logout</button>
+      <p className="fs-1 text-center">Hello, {user.email}!</p>
+      <button className="btn btn-primary w-100 mb-2" onClick={() => navigate("/events/view")}>View My Events</button>
+      <button className="btn btn-danger w-100 mb-2" onClick={handleLogout}>Logout</button>
     </div>
   )
 }
