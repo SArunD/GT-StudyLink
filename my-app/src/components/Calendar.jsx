@@ -139,3 +139,19 @@ function renderEventContent(eventInfo) {
         </>
     )
 }
+
+function addEvent(title, start, end) {
+    let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
+    let newEnd = info.startStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
+
+    if (title) {
+        calendarApi.addEvent({
+            id: createEventId(), //*********** CHANGE TO REAL EVENTID
+            title,
+            start: newStart.replace(/T.*$/, ''),
+            end: newEnd.replace(/T.*$/, ''),
+            allDay: false,
+        })
+        }
+    calendarApi.unselect() // clear date selection
+}
