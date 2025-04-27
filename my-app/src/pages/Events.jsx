@@ -5,6 +5,7 @@ import Calendar from "../components/Calendar"
 import Table from "../components/Table"
 import ViewEvents from './ViewEvents'
 import { useNavigate } from 'react-router'
+import './Events.css'
 
 function Events() {
   const [isCalendar, setIsCalendar] = useState(true)
