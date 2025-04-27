@@ -24,7 +24,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
             
             <Route element={<ProtectedRoutes />}>
-              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/events/add" element={<AddEvents />} />
               <Route path="/events/view" element={<ViewEvents />} />
             </Route>
