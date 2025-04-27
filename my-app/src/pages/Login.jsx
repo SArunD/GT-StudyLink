@@ -23,16 +23,50 @@ function Login() {
   }
 
   return (
-    <div style={{ border: "2px solid black" }}>
-      <h2>Login</h2>
+    // <div style={{ border: "2px solid black" }}>
+    //   <h2>Login</h2>
       
-      <form action={signIn}>
-        <input name='email' placeholder='Email' />
-        <input name='password' placeholder='Password' type='password' />
-        <button type="submit">Login</button>
-      </form>
+    //   <form action={signIn}>
+    //     <input name='email' placeholder='Email' />
+    //     <input name='password' placeholder='Password' type='password' />
+    //     <button type="submit">Login</button>
+    //   </form>
       
-      <button onClick={() => navigate("/register")}>Register?</button>
+    //   <button onClick={() => navigate("/register")}>Register?</button>
+    // </div>
+    <div className="container mt-5" style={{ maxWidth: "400px" }}>
+      <div className="card p-4 shadow">
+        <h2 className="mb-4 text-center">Login</h2>
+        <form action={signIn}>
+          <div className="mb-3">
+            <input
+              name="email"
+              placeholder="Email"
+              type="email"
+              className="form-control"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <input
+              name="password"
+              placeholder="Password"
+              type="password"
+              className="form-control"
+              required
+            />
+          </div>
+          <button type="submit" className="btn btn-primary w-100 mb-2">
+            Login
+          </button>
+        </form>
+        <button
+          onClick={() => navigate("/register")}
+          className="btn btn-link w-100"
+        >
+          Register?
+        </button>
+      </div>
     </div>
   )
 }
