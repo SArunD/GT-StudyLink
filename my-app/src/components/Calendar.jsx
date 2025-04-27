@@ -140,7 +140,7 @@ function renderEventContent(eventInfo) {
     )
 }
 
-function addEvent(title, start, end) {
+function addEvent(title, start, end) { //currently takes in dayjs dates/time for start and end
     let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
     let newEnd = info.startStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
 
