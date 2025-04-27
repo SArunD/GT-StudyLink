@@ -1,8 +1,6 @@
 import React, { useContext } from 'react'
 import Nav from 'react-bootstrap/Nav';
 
-import Nav from 'react-bootstrap/Nav';
-
 import { AuthContext } from "../utils/AuthContext"
 
 function Header() {
