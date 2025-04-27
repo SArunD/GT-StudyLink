@@ -23,17 +23,6 @@ function Login() {
   }
 
   return (
-    // <div style={{ border: "2px solid black" }}>
-    //   <h2>Login</h2>
-      
-    //   <form action={signIn}>
-    //     <input name='email' placeholder='Email' />
-    //     <input name='password' placeholder='Password' type='password' />
-    //     <button type="submit">Login</button>
-    //   </form>
-      
-    //   <button onClick={() => navigate("/register")}>Register?</button>
-    // </div>
     <div className="container mt-5" style={{ maxWidth: "400px" }}>
       <div className="card p-4 shadow">
         <h2 className="mb-4 text-center">Login</h2>
