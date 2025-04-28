@@ -1,157 +1,111 @@
-import React, { useState } from 'react'
-import { formatDate } from '@fullcalendar/core'
+import React, { useEffect, useState } from 'react'
+import { collection, getDocs } from "firebase/firestore"
+
 import FullCalendar from '@fullcalendar/react'
+import Modal from 'react-modal'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
+import { db } from "../lib/firebaseConfig"
 import interactionPlugin from '@fullcalendar/interaction'
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import randomColor from "randomcolor"
+import timeGridPlugin from '@fullcalendar/timegrid'
 
-let calendarApi;
-let info;
-let sName;
-let sTags;
-let sDesc;
-let sTimes;
-let seeSession;
+function Calendar() {
+  // const [events, setEvents] = useState([{
+  //   id: 1,
+  //   title: "Mock",
+  //   start: "2025-04-27T12:00:00.000Z",
+  //   end: "2025-04-27T15:00:00.000Z",
+  //   color: '#378006',
+  //   description: "test",
+  //   location: "CULC",
+  //   tags: ["1", "2", "3"],
+  //   createdBy: "mKtoQGEkxkcSV42vDuedyxb8FJ33"
+  // }])
+  const [events, setEvents] = useState([])
+  const [modalData, setModalData] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
-let eventGuid = 0
-let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
+  useEffect(() => {
+    getEvents()
+  }, [])
 
-const INITIAL_EVENTS = [
-  {
-    id: createEventId(),
-    title: 'All-day event',
-    start: todayStr
-  },
-  {
-    id: createEventId(),
-    title: 'Timed event',
-    start: todayStr + 'T12:00:00'
-  }
-]
-function createEventId() {
-  return String(eventGuid++)
-}
-
-/***** TO DO:
- * ADD TAG FUNCTIONALITY, FORMAT TIME ON EVENT INFO POPUP, 
- * ADD EVENT LIST VIEW, ADD FILTERING
- */
-
-// export default function Calendar() {
-//   return(
-//     <h2>calendar</h2>
-//   )
-// }
-
-
-export default function Calendar() {
-    const [currentEvents, setCurrentEvents] = useState([])
-  
-    function handleDateSelect(selectInfo) {
-    }
-
-  
-    function handleEventClick(clickInfo) {
-    //     sName = document.getElementById("sName");
-    //     sTags = document.getElementById("sTags");
-    //     sTimes = document.getElementById("sTimes");
-    //     sDesc = document.getElementById("sDesc");
-      seeSession = document.getElementById("seeSession");
-      document.getElementById("sessionClose").onclick = function(){seeSession.style.visibility="hidden"};
-
-    //     //change info
-    //     sName.textContent = clickInfo.event.title;
-    //     // sTags.textContent = clickInfo.event.extendedProps.tags;
-    //     // ****** NEED TO ADD TAGS, FORMAT TIME **********
-    //     sTimes.textContent = clickInfo.event.start + " - " + clickInfo.event.end;
-    //     sDesc.textContent = clickInfo.event.extendedProps.description;
-    //     console.log(clickInfo.event);
-
-    //     // show popup
-        seeSession.style.visibility="visible";
-    //     //****** FUNCTION TO REMOVE EVENT (FOR LATER USE) ************
-    // //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    // //     clickInfo.event.remove()
-    // //   }
-    }
-  
-    function handleEvents(events) {
-      setCurrentEvents(events)
-    }
-  
-    return (
-      
-      <div>
-        <h2>demo</h2>
-               <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            initialView='dayGridMonth'
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-            select={handleDateSelect}
-            eventContent={renderEventContent} // custom render function
-            eventClick={handleEventClick}
-            eventsSet={handleEvents} // called after events are initialized/added/changed/removed
-            /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
-          />
-          <div>
-            <div className="popup" id="seeSession">
-                <div className="popup-inner">
-                    <h2 id="sName">Name</h2>
-                    <label id="sTags">
-                        Tags:
-                    </label>
-                    <label id="sTimes">
-                        Time:
-                    </label>
-                    <p id="sDesc">
-                        Description:
-                    </p>
-                    <button id="sessionClose">Close</button>
-                </div>
-            </div>
-        </div>
-      </div>
-      
-    )
-  }
-
-function renderEventContent(eventInfo) {
-    return (
-        <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-        </>
-    )
-}
-
-function addEvent(title, start, end) { //currently takes in dayjs dates/time for start and end
-    let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
-    let newEnd = info.startStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
-
-    if (title) {
-        calendarApi.addEvent({
-            id: createEventId(), //*********** CHANGE TO REAL EVENTID
-            title,
-            start: newStart.replace(/T.*$/, ''),
-            end: newEnd.replace(/T.*$/, ''),
-            allDay: false,
-        })
+  const getEvents = async () => {
+    const snapshot = await getDocs(collection(db, "events"))
+    const docs = []
+    snapshot.forEach((doc) => {
+      docs.push({
+        id: doc.id,
+        title: doc.data().title,
+        start: new Date(`${doc.data().date}T${doc.data().startTime}:00`).toISOString(),
+        end: new Date(`${doc.data().date}T${doc.data().endTime}:00`).toISOString(),
+        textColor: "black",
+        extendedProps: {
+          location: doc.data().location,
+          description: doc.data().details,
+          tags: doc.data().tags,
+          createdBy: doc.data().createdBy
         }
-    calendarApi.unselect() // clear date selection
+      })
+    })
+    randomColor({ count: docs.length }).forEach((color, idx) => {
+      docs[idx].color = color
+    })
+    console.log(docs)
+    setEvents(docs)
+  }
+
+  Modal.setAppElement('#root')
+  const handleClick = (info) => {
+    if (!modalOpen) {
+      setModalOpen(true)
+    }
+    setModalData(info.event)
+  }
+
+  return (
+    <div>
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        contentLabel="Example Modal"
+        style={{ overlay: { zIndex: 1000 }, content: { height: "40vh", width: "50vw", left: "27%" } }}
+      >
+        {modalOpen && 
+        <>
+          {console.log(modalData)}
+          <h3>{modalData.title}</h3>
+          <div><span style={{ fontWeight: "bold" }}>Date:</span> {new Date(modalData.start.toString()).toLocaleDateString()}</div>
+          <div><span style={{ fontWeight: "bold" }}>Location:</span> {modalData.extendedProps.location}</div>
+          <div><span style={{ fontWeight: "bold" }}>Start Time:</span> {new Date(modalData.start.toString()).toLocaleTimeString()}</div>
+          <div><span style={{ fontWeight: "bold" }}>End Time:</span> {new Date(modalData.end.toString()).toLocaleTimeString()}</div>
+          <div><span style={{ fontWeight: "bold" }}>Details:</span> {modalData.extendedProps.description}</div>
+          <div><span style={{ fontWeight: "bold" }}>Tags:</span> {modalData.extendedProps.tags}</div>
+          <div><span style={{ fontWeight: "bold" }}>Created By:</span> <span className="text-primary">{modalData.extendedProps.createdBy}</span></div>
+          <button className="btn btn-danger" style={{ position: "absolute", bottom: 20, right: 20 }} onClick={() => setModalOpen(false)}>Close</button>
+        </>}
+      </Modal>
+      <FullCalendar 
+        height="85vh"
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay"
+        }}
+        buttonText={{
+          today: "Today",
+          month: "Month",
+          week: "Week",
+          day: "Day"
+        }}
+        fixedWeekCount={false}
+        events={events}
+        dayMaxEvents={true}
+        eventClick={handleClick}
+      />
+
+    </div>
+  )
 }
+
+export default Calendar

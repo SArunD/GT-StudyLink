@@ -12,7 +12,6 @@ import NotFound from "./pages/NotFound"
 import ProtectedRoutes from "./utils/ProtectedRoutes"
 import React from "react"
 import Register from "./pages/Register"
-import ViewEvents from "./pages/ViewEvents"
 
 function App() {
   return (
@@ -28,7 +27,6 @@ function App() {
               <Route element={<ProtectedRoutes />}>
                 <Route path="/home" element={<Home />} />
                 <Route path="/events/add" element={<AddEvents />} />
-                <Route path="/events/view" element={<ViewEvents />} />
               </Route>
           </Route>
         </Routes>

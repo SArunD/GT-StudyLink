@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { addDoc, collection } from "firebase/firestore"
 import { auth, db } from "../lib/firebaseConfig"
 
@@ -25,7 +25,6 @@ function Register() {
       const user = userCredentials.user
       addUser(e)
       setUser(user)
-      navigate("/home")
       console.log("Registered With: ", user.email)
     })
     .catch((err) => {
@@ -51,16 +50,16 @@ function Register() {
               <i className="bi bi-person"></i>
             </span>
             <input 
-              id="name"
-              name="name" 
+              id="firstName"
+              name="firstName" 
               placeholder="First Name" 
               className="form-control" 
               required 
               autoComplete="true"
             />
             <input 
-              id="name"
-              name="name" 
+              id="lastName"
+              name="lastName" 
               placeholder="Last Name" 
               className="form-control" 
               required 

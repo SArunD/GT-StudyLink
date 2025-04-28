@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { collection, getDocs, query, where } from "firebase/firestore"
 
 import { AuthContext } from "../utils/AuthContext"
+import ViewEvents from "../pages/ViewEvents"
 import { db } from "../lib/firebaseConfig"
 
 function Home() {
@@ -27,7 +28,10 @@ function Home() {
       {loading ? (
         <div className="fs-1 text-center">Loading...</div>
       ) : (
-        <div className="fs-1 text-center">👋 Hello, <span className="text-primary">{name}!</span></div>
+        <>
+          <div className="fs-1 text-center">👋 Hello, <span className="text-primary">{name}!</span></div>
+          <ViewEvents />
+        </>
       )}
     </div>
   )

@@ -20,7 +20,7 @@ function ViewEvents() {
     }
 
     setLoading(true)
-    const qryRef = query(collection(db, "events"), where("createdBy", "==", user.uid))
+    const qryRef = query(collection(db, "events"), where("createdBy", "==", user.email))
     const qrySnap = await getDocs(qryRef)
 
     if (qrySnap.empty) {
