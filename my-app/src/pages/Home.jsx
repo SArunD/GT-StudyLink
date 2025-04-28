@@ -26,7 +26,7 @@ function Home() {
   return (
     <div className="container mt-5">
       {loading ? (
-        <div className="fs-1 text-center">Loading...</div>
+        <div className="fs-1 text-center">⌛ Loading...</div>
       ) : (
         <>
           <div className="fs-1 text-center">👋 Hello, <span className="text-primary">{name}!</span></div>

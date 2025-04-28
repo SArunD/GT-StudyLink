@@ -1,12 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { collection, doc } from "firebase/firestore"
 
 import { AuthContext } from '../utils/AuthContext'
 import FullCalendar from '@fullcalendar/react'
 import Modal from 'react-modal'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { db } from "../lib/firebaseConfig"
-import { getDoc } from 'firebase/firestore'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 
@@ -21,23 +18,6 @@ function Calendar(props) {
       setModalOpen(true)
     }
     setModalData(info.event)
-  }
-
-  const handleRSVP = async () => {
-    if (!modalData.extendedProps.isRSVP) {
-      
-    }
-
-    // const docRef = doc(db, "events", modalData.id)
-    // const snapshot = await getDoc(docRef)
-    // if ("rsvps" in snapshot.data()) {
-      
-    // } else {
-    //   await updateDoc(docRef, {
-    //     rsvps: [user.email]
-    //   })
-    //   alert("RSVP Successfully!")
-    // }
   }
 
   return (
@@ -59,8 +39,8 @@ function Calendar(props) {
           <div><span style={{ fontWeight: "bold" }}>Details:</span> {modalData.extendedProps.description}</div>
           <div><span style={{ fontWeight: "bold" }}>Tags:</span> {modalData.extendedProps.tags}</div>
           <div><span style={{ fontWeight: "bold" }}>Created By:</span> <span className="text-primary">{modalData.extendedProps.authorEmail}</span></div>
-          <button className="btn btn-outline-primary" style={{ position: "absolute", top: 18, right: 20 }} onClick={() => handleRSVP()}>RSVP?</button>
-          <button className="btn btn-danger" style={{ position: "absolute", bottom: 20, right: 20 }} onClick={() => setModalOpen(false)}>Close</button>
+          {/* <button className="btn btn-outline-primary" style={{ position: "absolute", top: 18, right: 20 }} onClick={() => handleRSVP()}>RSVP?</button> */}
+          <button className="btn btn-danger" style={{ position: "absolute", bottom: 20, right: 20 }} onClick={() => setModalOpen(false)}><i className="bi bi-x-lg"></i> Close</button>
         </>}
       </Modal>
       <FullCalendar 

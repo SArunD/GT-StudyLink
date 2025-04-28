@@ -39,7 +39,9 @@ function Login() {
       console.log("Logged In With: ", e.target[0].value)
     })
     .catch((err) => {
-      alert(err)
+      if (err.code == "auth/invalid-credential") {
+        alert("Wrong Username or Password! Please enter the correct crendentials.")
+      }
     })
   }
 

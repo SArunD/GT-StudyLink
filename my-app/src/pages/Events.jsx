@@ -12,12 +12,14 @@ function Events() {
   const [events, setEvents] = useState([])
   const [rawEvents, setRawEvents] = useState([])
   const [isCalendar, setIsCalendar] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getEvents()
   }, [])
   
   const getEvents = async () => {
+    setLoading(true)
     const snapshot = await getDocs(collection(db, "events"))
     setRawEvents(snapshot.docs)
     const docs = []
@@ -42,6 +44,7 @@ function Events() {
     })
     console.log(docs)
     setEvents(docs)
+    setLoading(false)
   }
 
   const handleView = (val) => {
@@ -54,11 +57,17 @@ function Events() {
   
   return (
     <div>
-        <div className="d-flex justify-content-center gap-3 mb-3">
-          <button className="rounded-pill" onClick={() => handleView(0)}>Calendar</button>
-          <button className="rounded-pill" onClick={() => handleView(1)}>Table/Tile</button>
-        </div>
-        {isCalendar ? (<Calendar data={events} />) : (<Table data={rawEvents} />)}
+        {loading ? (
+          <div className="fs-1 text-center">⌛ Loading...</div>
+        ) : (
+          <>
+            <div className="d-flex justify-content-center gap-3 mb-3">
+              <button className="rounded btn btn-primary" onClick={() => handleView(0)}>Calendar</button>
+              <button className="rounded btn btn-primary" onClick={() => handleView(1)}>Table/Tile</button>
+            </div>
+            {isCalendar ? (<Calendar data={events} />) : (<Table data={rawEvents} />)}
+          </>
+        )}
     </div>
   )
 }
