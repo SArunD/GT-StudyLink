@@ -1,16 +1,51 @@
-import React, { useContext, useState } from 'react'
+import "../styles/Events.css"
 
-import { AuthContext } from "../utils/AuthContext"
+import React, { useEffect, useState } from 'react'
+import { collection, getDocs, } from "firebase/firestore"
+
 import Calendar from "../components/Calendar"
 import Table from "../components/Table"
-import ViewEvents from './ViewEvents'
-import { useNavigate } from 'react-router'
-import './Events.css'
+import { db } from "../lib/firebaseConfig"
+import randomColor from "randomcolor"
 
 function Events() {
+  const [events, setEvents] = useState([])
+  const [rawEvents, setRawEvents] = useState([])
   const [isCalendar, setIsCalendar] = useState(true)
-  const { user } = useContext(AuthContext)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getEvents()
+  }, [])
+  
+  const getEvents = async () => {
+    setLoading(true)
+    const snapshot = await getDocs(collection(db, "events"))
+    setRawEvents(snapshot.docs)
+    const docs = []
+    snapshot.forEach((doc) => {
+      docs.push({
+        id: doc.id,
+        title: doc.data().title,
+        start: new Date(`${doc.data().date}T${doc.data().startTime}:00`).toISOString(),
+        end: new Date(`${doc.data().date}T${doc.data().endTime}:00`).toISOString(),
+        textColor: "black",
+        extendedProps: {
+          location: doc.data().location,
+          description: doc.data().details,
+          tags: doc.data().tags,
+          authorEmail: doc.data().authorEmail,
+          isRSVP: false
+        }
+      })
+    })
+    randomColor({ count: docs.length }).forEach((color, idx) => {
+      docs[idx].color = color
+    })
+    console.log(docs)
+    setEvents(docs)
+    setLoading(false)
+  }
 
   const handleView = (val) => {
     if (val == 0) {
@@ -21,21 +56,18 @@ function Events() {
   }
   
   return (
-    <div style={{ border: "2px solid black" }}>
-        <h2>Events</h2>
-        <button onClick={() => handleView(0)}>Calendar</button>
-        <button onClick={() => handleView(1)}>Table/Tile</button>
-
-        {isCalendar ? (<Calendar />) : (<Table />)}
-        {user ? 
-        (
-          <div>
-            <button onClick={() => navigate("add")}>Add Event?</button>
-            <button onClick={() => navigate("view")}>View Created Event?</button>
-            {/* <ViewEvents /> */}
-          </div>
-        ) :
-        (<button onClick={() => navigate("/login")}>Login?</button>)}        
+    <div>
+        {loading ? (
+          <div className="fs-1 text-center">⌛ Loading...</div>
+        ) : (
+          <>
+            <div className="d-flex justify-content-center gap-3 mb-3">
+              <button className="rounded btn btn-primary" onClick={() => handleView(0)}>Calendar</button>
+              <button className="rounded btn btn-primary" onClick={() => handleView(1)}>Table/Tile</button>
+            </div>
+            {isCalendar ? (<Calendar data={events} />) : (<Table data={rawEvents} />)}
+          </>
+        )}
     </div>
   )
 }

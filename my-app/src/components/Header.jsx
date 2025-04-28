@@ -1,37 +1,60 @@
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import React, { useContext } from 'react'
-import Nav from 'react-bootstrap/Nav';
 
 import { AuthContext } from "../utils/AuthContext"
+import { useNavigate } from "react-router"
 
 function Header() {
-  const { user } = useContext(AuthContext)
+  const { user, setUser } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    const proceed = confirm("You are about to Logout, do you want to proceed?")
+    if (proceed) {
+      setUser(null)
+      localStorage.removeItem("user")
+      console.log("Logged Out Current User")
+    }
+  }
 
   return (
-    <header className="ms-2 pt-2">
-      <Nav
-        variant="underline"
-        activeKey="/home"
-      >
-        <Nav.Item>
-          <Nav.Link className="fs-4" href="/home">StudyLink</Nav.Link>
+    <Nav
+      variant="underline"
+      activeKey="/home"
+      className="px-3 pt-2 pb-0"
+    >
+      <Nav.Item>
+        <Nav.Link className="fs-4" href="/home"><i className="bi bi-book"></i> StudyLink</Nav.Link>
+      </Nav.Item>
+      <Nav.Item className="pt-2">
+        <Nav.Link href="/events">Events</Nav.Link>
+      </Nav.Item>
+      
+      {user ? (
+        <>
+          <Nav.Item className="pt-2">
+            <Nav.Link href="/events/add">Add Event</Nav.Link>
+          </Nav.Item>
+          <Nav.Item className="ms-auto">
+            <Button 
+              variant="danger mt-2" 
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
+          </Nav.Item>
+        </>
+      ) : (
+        <Nav.Item className="ms-auto">
+          <Button 
+            variant="outline-primary mt-2" 
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Button>
         </Nav.Item>
-        {/* <Nav.Item>
-          <Nav.Link href="/events">Calendar</Nav.Link>
-        </Nav.Item> */}
-        <Nav.Item className="pt-2">
-          <Nav.Link href="/events">View All Events</Nav.Link>
-        </Nav.Item>
-        <Nav.Item className="pt-2">
-          <Nav.Link href="/events/add">Create an Event</Nav.Link>
-        </Nav.Item>
-        <Nav.Item className="pt-2">
-          <Nav.Link href="/login">Login</Nav.Link>
-        </Nav.Item>
-        {/* <Nav.Item>
-          <Nav.Link href="/home">View Events</Nav.Link>
-        </Nav.Item> */}
-      </Nav>
-    </header>
+      )}
+    </Nav>
   )
 }
 
