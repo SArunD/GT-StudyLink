@@ -1,3 +1,5 @@
+import './styles/Events.css'
+
 import React, { useContext, useState } from 'react'
 
 import { AuthContext } from "../utils/AuthContext"

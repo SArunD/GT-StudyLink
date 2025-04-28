@@ -15,7 +15,7 @@ function Login() {
     .then((userCredentials) => {
       const user = userCredentials.user
       setUser(user)
-      navigate("/")
+      navigate("/home")
       console.log("Logged In With: ", e.target[0].value)
     })
     .catch((err) => {

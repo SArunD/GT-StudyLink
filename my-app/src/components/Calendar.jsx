@@ -59,8 +59,8 @@ export default function Calendar() {
     //     sTags = document.getElementById("sTags");
     //     sTimes = document.getElementById("sTimes");
     //     sDesc = document.getElementById("sDesc");
-    //     seeSession = document.getElementById("seeSession");
-    //     document.getElementById("sessionClose").onclick = function(){seeSession.style.visibility="hidden"};
+      seeSession = document.getElementById("seeSession");
+      document.getElementById("sessionClose").onclick = function(){seeSession.style.visibility="hidden"};
 
     //     //change info
     //     sName.textContent = clickInfo.event.title;
@@ -71,7 +71,7 @@ export default function Calendar() {
     //     console.log(clickInfo.event);
 
     //     // show popup
-    //     seeSession.style.visibility="visible";
+        seeSession.style.visibility="visible";
     //     //****** FUNCTION TO REMOVE EVENT (FOR LATER USE) ************
     // //   if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
     // //     clickInfo.event.remove()
@@ -109,25 +109,24 @@ export default function Calendar() {
             eventRemove={function(){}}
             */
           />
+          <div>
+            <div className="popup" id="seeSession">
+                <div className="popup-inner">
+                    <h2 id="sName">Name</h2>
+                    <label id="sTags">
+                        Tags:
+                    </label>
+                    <label id="sTimes">
+                        Time:
+                    </label>
+                    <p id="sDesc">
+                        Description:
+                    </p>
+                    <button id="sessionClose">Close</button>
+                </div>
+            </div>
+        </div>
       </div>
-      //   <div>
-      //       {seeCreate ? <CreateSession toggle={toggleCreate} /> : null}
-      //       <div className="popup" id="seeSession">
-      //           <div className="popup-inner">
-      //               <h2 id="sName">Name</h2>
-      //               <label id="sTags">
-      //                   Tags:
-      //               </label>
-      //               <label id="sTimes">
-      //                   Time:
-      //               </label>
-      //               <p id="sDesc">
-      //                   Description:
-      //               </p>
-      //               <button id="sessionClose">Close</button>
-      //           </div>
-      //       </div>
-      //   </div>
       
     )
   }
@@ -139,4 +138,20 @@ function renderEventContent(eventInfo) {
         <i>{eventInfo.event.title}</i>
         </>
     )
+}
+
+function addEvent(title, start, end) { //currently takes in dayjs dates/time for start and end
+    let newStart = info.startStr.substring(0, 10) + "T" + start.hour() + ":" + start.minute() + ":" + start.second();
+    let newEnd = info.startStr.substring(0, 10) + "T" + end.hour() + ":" + end.minute() + ":" + end.second();
+
+    if (title) {
+        calendarApi.addEvent({
+            id: createEventId(), //*********** CHANGE TO REAL EVENTID
+            title,
+            start: newStart.replace(/T.*$/, ''),
+            end: newEnd.replace(/T.*$/, ''),
+            allDay: false,
+        })
+        }
+    calendarApi.unselect() // clear date selection
 }
