@@ -1,58 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { collection, getDocs } from "firebase/firestore"
+import React, { useContext, useState } from 'react'
+import { collection, doc } from "firebase/firestore"
 
+import { AuthContext } from '../utils/AuthContext'
 import FullCalendar from '@fullcalendar/react'
 import Modal from 'react-modal'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { db } from "../lib/firebaseConfig"
+import { getDoc } from 'firebase/firestore'
 import interactionPlugin from '@fullcalendar/interaction'
-import randomColor from "randomcolor"
 import timeGridPlugin from '@fullcalendar/timegrid'
 
-function Calendar() {
-  // const [events, setEvents] = useState([{
-  //   id: 1,
-  //   title: "Mock",
-  //   start: "2025-04-27T12:00:00.000Z",
-  //   end: "2025-04-27T15:00:00.000Z",
-  //   color: '#378006',
-  //   description: "test",
-  //   location: "CULC",
-  //   tags: ["1", "2", "3"],
-  //   createdBy: "mKtoQGEkxkcSV42vDuedyxb8FJ33"
-  // }])
-  const [events, setEvents] = useState([])
+function Calendar(props) {
+  const { user } = useContext(AuthContext)
   const [modalData, setModalData] = useState(null)
   const [modalOpen, setModalOpen] = useState(false)
-
-  useEffect(() => {
-    getEvents()
-  }, [])
-
-  const getEvents = async () => {
-    const snapshot = await getDocs(collection(db, "events"))
-    const docs = []
-    snapshot.forEach((doc) => {
-      docs.push({
-        id: doc.id,
-        title: doc.data().title,
-        start: new Date(`${doc.data().date}T${doc.data().startTime}:00`).toISOString(),
-        end: new Date(`${doc.data().date}T${doc.data().endTime}:00`).toISOString(),
-        textColor: "black",
-        extendedProps: {
-          location: doc.data().location,
-          description: doc.data().details,
-          tags: doc.data().tags,
-          createdBy: doc.data().createdBy
-        }
-      })
-    })
-    randomColor({ count: docs.length }).forEach((color, idx) => {
-      docs[idx].color = color
-    })
-    console.log(docs)
-    setEvents(docs)
-  }
 
   Modal.setAppElement('#root')
   const handleClick = (info) => {
@@ -62,13 +23,30 @@ function Calendar() {
     setModalData(info.event)
   }
 
+  const handleRSVP = async () => {
+    if (!modalData.extendedProps.isRSVP) {
+      
+    }
+
+    // const docRef = doc(db, "events", modalData.id)
+    // const snapshot = await getDoc(docRef)
+    // if ("rsvps" in snapshot.data()) {
+      
+    // } else {
+    //   await updateDoc(docRef, {
+    //     rsvps: [user.email]
+    //   })
+    //   alert("RSVP Successfully!")
+    // }
+  }
+
   return (
-    <div>
+    <div className="px-4">
       <Modal
         isOpen={modalOpen}
         onRequestClose={() => setModalOpen(false)}
         contentLabel="Example Modal"
-        style={{ overlay: { zIndex: 1000 }, content: { height: "40vh", width: "50vw", left: "27%" } }}
+        style={{ overlay: { zIndex: 1000 }, content: { height: "35vh", width: "50vw", left: "27%" } }}
       >
         {modalOpen && 
         <>
@@ -80,7 +58,8 @@ function Calendar() {
           <div><span style={{ fontWeight: "bold" }}>End Time:</span> {new Date(modalData.end.toString()).toLocaleTimeString()}</div>
           <div><span style={{ fontWeight: "bold" }}>Details:</span> {modalData.extendedProps.description}</div>
           <div><span style={{ fontWeight: "bold" }}>Tags:</span> {modalData.extendedProps.tags}</div>
-          <div><span style={{ fontWeight: "bold" }}>Created By:</span> <span className="text-primary">{modalData.extendedProps.createdBy}</span></div>
+          <div><span style={{ fontWeight: "bold" }}>Created By:</span> <span className="text-primary">{modalData.extendedProps.authorEmail}</span></div>
+          <button className="btn btn-outline-primary" style={{ position: "absolute", top: 18, right: 20 }} onClick={() => handleRSVP()}>RSVP?</button>
           <button className="btn btn-danger" style={{ position: "absolute", bottom: 20, right: 20 }} onClick={() => setModalOpen(false)}>Close</button>
         </>}
       </Modal>
@@ -99,7 +78,7 @@ function Calendar() {
           day: "Day"
         }}
         fixedWeekCount={false}
-        events={events}
+        events={props.data}
         dayMaxEvents={true}
         eventClick={handleClick}
       />

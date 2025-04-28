@@ -59,11 +59,11 @@ function ViewEvents() {
       (userEvents.length > 0 ? (
         userEvents.map((item) => (
           <div key={item.id}>
-            <h4>{item.id}</h4>
+            <h4>{item.title}</h4>
             <button onClick={() => handleDelete(item.id)}>Delete?</button>
           </div>
         ))) : (
-          <h2>No events found!</h2>
+          <h4>No events found!</h4>
         )
       )}
     </div>

@@ -43,7 +43,8 @@ function AddEvent() {
       rsvp: e.target[5].value,
       tags: selected.map((item) => item.label),
       details: e.target[7].value,
-      createdBy: user.email
+      authorEmail: user.email,
+      authorID: user.uid
     })
     .then(() => {
       alert("Event Saved Successfully!")

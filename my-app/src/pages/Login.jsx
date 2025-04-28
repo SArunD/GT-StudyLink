@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import { collection, where } from 'firebase/firestore'
+import { Timestamp, collection, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { auth, db } from "../lib/firebaseConfig"
 
 import { AuthContext } from '../utils/AuthContext'
-import { auth } from "../lib/firebaseConfig"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router'
 
@@ -10,17 +10,36 @@ function Login() {
   const navigate = useNavigate()
   const { setUser } = useContext(AuthContext)
 
+  const updateUser = async (e) => {
+    const qryRef = await query(collection(db, "users"), where("email", "==", e.target[0].value))
+    const qrySnap = await getDocs(qryRef)
+
+    if (qrySnap.empty) {
+      alert("User doesn't exist!")
+    }
+    
+    await updateDoc(qrySnap.docs[0].ref, {
+      lastActive: Timestamp.now()
+    })
+    
+    return qrySnap.docs[0].ref.id
+  }
+
   const signIn = async (e) => {
     e.preventDefault()
     await signInWithEmailAndPassword(auth, e.target[0].value, e.target[1].value)
-    .then((userCredentials) => {
-      const user = userCredentials.user
+    .then(async (userCredentials) => {
+      let user = userCredentials.user
+      const id = updateUser(e)
+      
+      user.uid = await id
+      console.log(user)
       setUser(user)
       navigate("/home")
       console.log("Logged In With: ", e.target[0].value)
     })
     .catch((err) => {
-      alert(err.code)
+      alert(err)
     })
   }
 

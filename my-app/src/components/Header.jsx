@@ -21,6 +21,7 @@ function Header() {
     <Nav
       variant="underline"
       activeKey="/home"
+      className="px-3 pt-2 pb-0"
     >
       <Nav.Item>
         <Nav.Link className="fs-4" href="/home"><i className="bi bi-book"></i> StudyLink</Nav.Link>
@@ -31,6 +32,9 @@ function Header() {
       
       {user ? (
         <>
+          <Nav.Item className="pt-2">
+            <Nav.Link href="/events/add">Add Event</Nav.Link>
+          </Nav.Item>
           <Nav.Item className="ms-auto">
             <Button 
               variant="danger mt-2" 

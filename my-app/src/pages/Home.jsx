@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { collection, getDocs, query, where } from "firebase/firestore"
 
 import { AuthContext } from "../utils/AuthContext"
-import ViewEvents from "../pages/ViewEvents"
+import ViewEvents from "../components/ViewEvents"
 import { db } from "../lib/firebaseConfig"
 
 function Home() {
