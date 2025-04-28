@@ -72,6 +72,7 @@ GT-StudyLink is a web application that helps students connect, organize, and man
 
 
 ### Project Structure
+```
 my-app/
 ├── public/             # Public assets
 ├── src/                # Source code
