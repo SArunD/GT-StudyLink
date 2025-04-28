@@ -1,3 +1,5 @@
+import "./styles/App.css"
+
 import { Route, Routes } from "react-router"
 
 import AddEvents from "./pages/AddEvents"
@@ -11,25 +13,26 @@ import ProtectedRoutes from "./utils/ProtectedRoutes"
 import React from "react"
 import Register from "./pages/Register"
 import ViewEvents from "./pages/ViewEvents"
-import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route element={<MainLayout />}>
-            <Route path="/events" element={<Events />} />
-            <Route path="*" element={<NotFound />} />
-            
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/home" element={<Home />} />
-              <Route path="/events/add" element={<AddEvents />} />
-              <Route path="/events/view" element={<ViewEvents />} />
-            </Route>
-        </Route>
-      </Routes>
+      <div id="mainBox">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route element={<MainLayout />}>
+              <Route path="/events" element={<Events />} />
+              <Route path="*" element={<NotFound />} />
+              
+              <Route element={<ProtectedRoutes />}>
+                <Route path="/home" element={<Home />} />
+                <Route path="/events/add" element={<AddEvents />} />
+                <Route path="/events/view" element={<ViewEvents />} />
+              </Route>
+          </Route>
+        </Routes>
+      </div>
     </AuthProvider>
   )
 }

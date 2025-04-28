@@ -1,5 +1,5 @@
 #seeSession {
-    visibility:hidden;
+    visibility: hidden;
 }
 
 /* POPUPS: */
@@ -13,7 +13,7 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.1);
-    }
+}
 
 .popup-inner {
     background-color:ghostwhite;

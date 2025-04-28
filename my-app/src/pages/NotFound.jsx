@@ -1,13 +1,24 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
+import React, { useContext } from 'react'
 
+import { AuthContext } from "../utils/AuthContext"
+import { useNavigate } from 'react-router'
 
 function NotFound() {
   const navigate = useNavigate()
+  const { user } = useContext(AuthContext)
+  
   return (
-    <div className="container mt-5">
-      <div className="fs-1 text-center">Page Not Found</div>
-      <button className="btn btn-link w-100" onClick={() => navigate("/home")}>Return Home</button>
+    <div className="container mt-5 text-center">
+      <div className="fs-1 mb-2">Page Not Found!</div>
+      <p className="mb-3">We can't find the page you were looking for.</p>
+      {user ? (
+        <div>
+          <button className="btn btn-primary me-2" onClick={() => navigate("/home")}>Back To Home</button>
+          <button className="btn btn-outline-primary" onClick={() => navigate("/events")}>Back To Events</button>
+        </div>
+      ) : (
+        <button className="btn btn-outline-primary" onClick={() => navigate("/home")}>Back To Home</button>
+      )}
     </div>
   )
 }

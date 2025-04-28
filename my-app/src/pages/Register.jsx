@@ -12,19 +12,20 @@ function Register() {
 
   const addUser = async (e) => {
     await addDoc(collection(db, "users"), {
-      name: e.target[0].value,
-      email: e.target[1].value
+      firstName: e.target[0].value,
+      lastName: e.target[1].value,
+      email: e.target[2].value
     })
   }
 
   const signUp = async (e) => {
     e.preventDefault()
-    await createUserWithEmailAndPassword(auth, e.target[1].value, e.target[2].value)
+    await createUserWithEmailAndPassword(auth, e.target[2].value, e.target[3].value)
     .then((userCredentials) => {
       const user = userCredentials.user
       addUser(e)
       setUser(user)
-      navigate("/")
+      navigate("/home")
       console.log("Registered With: ", user.email)
     })
     .catch((err) => {
@@ -32,13 +33,15 @@ function Register() {
         alert("Invalid Email: Please enter a valid email!")
       } else if (err.code == "auth/weak-password") {
         alert("Weak Password: Please enter a stronger password!")
+      } else if (err.code == "auth/email-already-in-use") {
+        alert("Invalid Register: Email Already Exists! Try Login Instead.")
       }
     })
   }
 
   return (
     <div>
-      <div className="container card p-4 shadow" style={{ maxWidth: "400px" }}>
+      <div className="container card p-4 shadow" style={{ maxWidth: "450px" }}>
       <h3 className="mb-4 text-center">Register</h3>
       <form onSubmit={signUp}>
         <div className="mb-3">
@@ -50,7 +53,15 @@ function Register() {
             <input 
               id="name"
               name="name" 
-              placeholder="Enter your name" 
+              placeholder="First Name" 
+              className="form-control" 
+              required 
+              autoComplete="true"
+            />
+            <input 
+              id="name"
+              name="name" 
+              placeholder="Last Name" 
               className="form-control" 
               required 
               autoComplete="true"
