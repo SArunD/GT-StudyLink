@@ -35,7 +35,7 @@ function Calendar(props) {
           <div><span style={{ fontWeight: "bold" }}>Date:</span> {new Date(modalData.start.toString()).toLocaleDateString()}</div>
           <div><span style={{ fontWeight: "bold" }}>Location:</span> {modalData.extendedProps.location}</div>
           <div><span style={{ fontWeight: "bold" }}>Start Time:</span> {new Date(modalData.start.toString()).toLocaleTimeString()}</div>
-          <div><span style={{ fontWeight: "bold" }}>End Time:</span> {new Date(modalData.end.toString()).toLocaleTimeString()}</div>
+          {/* <div><span style={{ fontWeight: "bold" }}>End Time:</span> {new Date(modalData.end.toString()).toLocaleTimeString()}</div> */}
           <div><span style={{ fontWeight: "bold" }}>Details:</span> {modalData.extendedProps.description}</div>
           <div><span style={{ fontWeight: "bold" }}>Tags:</span> {modalData.extendedProps.tags}</div>
           <div><span style={{ fontWeight: "bold" }}>Created By:</span> <span className="text-primary">{modalData.extendedProps.authorEmail}</span></div>
