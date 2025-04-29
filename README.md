@@ -1,10 +1,11 @@
-# GT-StudyLink
+# 📖 GT StudyLink
 
-GT-StudyLink is a web application that helps students connect, organize, and manage study events and meetups. The platform allows users to create events, RSVP to events created by others, and view all upcoming events through both calendar and list views.
+GT StudyLink is a web application that helps students (specifically Georgia Tech students) to connect, organize, and manage study events and meetups across campus. The platform allows users to create events, RSVP to events created by others, and view all upcoming events through both calendar and list views. All events are rendered, and updated in real-time, allowing for most up-to-date information for users at any time.
 
 
-## Features
+## ✨ Features
 - **User Authentication**: Register and login functionality using Firebase Authentication
+- **User Presistence**: Presist user sessions using localStorage
 - **Event Creation**: Create study events with details like title, location, date, time, and RSVP limits
 - **Event Management**: View, edit, and delete events you've created
 - **RSVP System**: RSVP to events created by other users
@@ -13,22 +14,21 @@ GT-StudyLink is a web application that helps students connect, organize, and man
 - **Tagging System**: Add tags to events for better categorization and searching
 
 
-## Tech Stack
+## 🔧 Tech Stack
 - **Frontend**: React.js with Vite as the build tool
 - **UI Components**: Bootstrap and React-Bootstrap for styling
 - **Calendar**: FullCalendar for the calendar interface
 - **Database**: Firebase Firestore for data storage
-- **Authentication**: Firebase Authentication
+- **Authentication**: Firebase Authentication (Email/Password)
 
 
-
-## Setup Instructions
+## 📋 Setup Instructions
 ### Prerequisites
 - Node.js (v16 or later) and npm installed on your machine
 - A Firebase account for database and authentication services
 
 
-### Installation
+### 📥 Installation
 1. Clone the repository:
    ```
    git clone https://github.com/yourusername/GT-StudyLink.git
@@ -54,6 +54,10 @@ GT-StudyLink is a web application that helps students connect, organize, and man
        appId: "YOUR_APP_ID",
        measurementId: "YOUR_MEASUREMENT_ID"
      }
+     const app = initializeApp(firebaseConfig)
+     const db = getFirestore(app)
+     const auth = getAuth(app)
+     export { db, auth }
      ```
 4. Database Setup:
    - Create a `tags` collection in Firestore and add some initial tag documents with the structure:
@@ -64,33 +68,36 @@ GT-StudyLink is a web application that helps students connect, organize, and man
      ```
    - Create a `users` collection (this will be populated automatically when users register)
    - Create an `events` collection (this will be populated when users create events)
-5. Running the Application:
+5. Running the Application (Development):
    ```
    npm run dev
    ```
    The application will be available at `http://localhost:5173/` (or the port specified by Vite).
 
 
-### Project Structure
+### 📂 Project Structure
 ```
 my-app/
 ├── public/             # Public assets
 ├── src/                # Source code
 │   ├── components/     # Reusable React components (Calendar, Table, ViewEvents)
 │   ├── lib/            # Configuration files (firebaseConfig.js)
-│   ├── pages/          # Main page components (Home, Events, Login, Register, AddEvents)
+│   ├── pages/          # Main page components (Home, Events, Login, Register, AddEvents, NotFound)
 │   ├── styles/         # CSS styles for components and pages
 │   ├── utils/          # Utility functions and context providers (AuthContext, MainLayout, ProtectedRoutes)
 │   ├── App.jsx         # Main application component
 │   └── main.jsx        # Entry point
 ├── node_modules/       # Dependencies (installed via npm)
+├── .gitignore          # Git Ignore file to avoid certain folders & files (lib/ & node_modules/)
+├── eslint.config.js    # Configuration file for ESLint, a JS linter
+├── index.html          # Base .html file for the web application
 ├── package.json        # Dependencies and scripts
 ├── package-lock.json   # Lock file for dependencies
 └── vite.config.js      # Vite configuration
 ```
 
 
-## Usage
+## 🚀 Usage
 1. Registration/Login:
    - New users can register with email and password
    - Existing users can log in with their credentials
@@ -106,10 +113,10 @@ my-app/
    - Set RSVP limits
    - Add tags to categorize your event
 5. Managing Your Events:
-   - Edit or delete events you've created
-   - View RSVPs for your events
+   - Delete events you've created
+   - RSVP to other users' events
 
-## Data Model
+## 🗃️ Data Model
 The application uses the following data models:
 - Users:
   ```
@@ -147,7 +154,7 @@ The application uses the following data models:
   ```
 
 
-## Dependencies
+## 📦 Dependencies
 The project relies on the following main dependencies:
 - React and React DOM for UI
 - Firebase for authentication and database
@@ -158,7 +165,7 @@ The project relies on the following main dependencies:
 - RandomColor for generating event colors
 
 
-## Building for Production
+## 🛠️ Building for Production
 To build the application for production:
 ```
 npm run build
