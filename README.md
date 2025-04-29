@@ -1,3 +1,7 @@
+https://github.com/user-attachments/assets/0f135d73-ed7f-4535-a750-99a86c85eb77
+
+---
+
 # 📖 GT StudyLink
 
 GT StudyLink is a web application that helps students (specifically Georgia Tech students) to connect, organize, and manage study events and meetups across campus. The platform allows users to create events, RSVP to events created by others, and view all upcoming events through both calendar and list views. All events are rendered, and updated in real-time, allowing for most up-to-date information for users at any time.
@@ -166,7 +170,7 @@ The project relies on the following main dependencies:
 
 
 ## 🛠️ Building for Production
-To build the application for production:
+To build the application for production (Untested):
 ```
 npm run build
 ```
